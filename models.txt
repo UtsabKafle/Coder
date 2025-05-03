@@ -1,0 +1,1024 @@
+{
+  "creator": "@PaxSenix",
+  "ok": true,
+  "object": "list",
+  "data": [
+    {
+      "id": "pax-uncensor",
+      "object": "model",
+      "created": null,
+      "owned_by": "paxsenix",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-3.5-turbo",
+      "object": "model",
+      "created": 1677610602,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-3.5-turbo-0301",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-3.5-turbo-0613",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-3.5-turbo-16k",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-4",
+      "object": "model",
+      "created": 1678499200,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-4-32k",
+      "object": "model",
+      "created": 1678499200,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-4-turbo",
+      "object": "model",
+      "created": 1678499200,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-4o-mini",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-4o",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "chatgpt-4o-latest",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "o1",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "o1-mini",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "o1-preview",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "o3",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "o3-mini",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-4.5-preview",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-4.1",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-4.1-mini",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gpt-4.1-nano",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "o4-mini",
+      "object": "model",
+      "created": null,
+      "owned_by": "openai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "claude-3-haiku",
+      "object": "model",
+      "created": null,
+      "owned_by": "anthropic",
+      "type": "chat.completions"
+    },
+    {
+      "id": "claude-3-5-haiku",
+      "object": "model",
+      "created": null,
+      "owned_by": "anthropic",
+      "type": "chat.completions"
+    },
+    {
+      "id": "claude-3-sonnet",
+      "object": "model",
+      "created": null,
+      "owned_by": "anthropic",
+      "type": "chat.completions"
+    },
+    {
+      "id": "claude-3-opus",
+      "object": "model",
+      "created": null,
+      "owned_by": "anthropic",
+      "type": "chat.completions"
+    },
+    {
+      "id": "claude-3-5-sonnet",
+      "object": "model",
+      "created": null,
+      "owned_by": "anthropic",
+      "type": "chat.completions"
+    },
+    {
+      "id": "claude-3-7-sonnet",
+      "object": "model",
+      "created": null,
+      "owned_by": "anthropic",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3.1-sonar-small-128k-online",
+      "object": "model",
+      "created": 1712649600,
+      "owned_by": "perplexity",
+      "type": "chat.completions"
+    },
+    {
+      "id": "sonar",
+      "object": "model",
+      "created": null,
+      "owned_by": "perplexity",
+      "type": "chat.completions"
+    },
+    {
+      "id": "sonar-pro",
+      "object": "model",
+      "created": null,
+      "owned_by": "perplexity",
+      "type": "chat.completions"
+    },
+    {
+      "id": "sonar-deep-research",
+      "object": "model",
+      "created": null,
+      "owned_by": "perplexity",
+      "type": "chat.completions"
+    },
+    {
+      "id": "sonar-reasoning",
+      "object": "model",
+      "created": null,
+      "owned_by": "perplexity",
+      "type": "chat.completions"
+    },
+    {
+      "id": "sonar-reasoning-pro",
+      "object": "model",
+      "created": null,
+      "owned_by": "perplexity",
+      "type": "chat.completions"
+    },
+    {
+      "id": "r1-1776",
+      "object": "model",
+      "created": null,
+      "owned_by": "perplexity",
+      "type": "chat.completions"
+    },
+    {
+      "id": "deepseek-r1",
+      "object": "model",
+      "created": null,
+      "owned_by": "deepseek-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "deepseek-v3",
+      "object": "model",
+      "created": null,
+      "owned_by": "deepseek-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "deepseek-v3-0324",
+      "object": "model",
+      "created": null,
+      "owned_by": "deepseek-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "deepseek-r1-distill-qwen-32b",
+      "object": "model",
+      "created": null,
+      "owned_by": "deepseek-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "deepseek-r1-distill-llama-70b",
+      "object": "model",
+      "created": null,
+      "owned_by": "deepseek-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "deepseek-v3-turbo",
+      "object": "model",
+      "created": null,
+      "owned_by": "deepseek-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "deepseek-r1-zero",
+      "object": "model",
+      "created": null,
+      "owned_by": "deepseek-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "deepseek-r1-turbo",
+      "object": "model",
+      "created": null,
+      "owned_by": "deepseek-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "deepseek-coder-6.7b",
+      "object": "model",
+      "created": null,
+      "owned_by": "deepseek-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "command-r",
+      "object": "model",
+      "created": null,
+      "owned_by": "cohere",
+      "type": "chat.completions"
+    },
+    {
+      "id": "command-r-plus",
+      "object": "model",
+      "created": null,
+      "owned_by": "cohere",
+      "type": "chat.completions"
+    },
+    {
+      "id": "command-light-nightly",
+      "object": "model",
+      "created": null,
+      "owned_by": "cohere",
+      "type": "chat.completions"
+    },
+    {
+      "id": "command",
+      "object": "model",
+      "created": null,
+      "owned_by": "cohere",
+      "type": "chat.completions"
+    },
+    {
+      "id": "command-light",
+      "object": "model",
+      "created": null,
+      "owned_by": "cohere",
+      "type": "chat.completions"
+    },
+    {
+      "id": "c4ai-aya",
+      "object": "model",
+      "created": null,
+      "owned_by": "cohere",
+      "type": "chat.completions"
+    },
+    {
+      "id": "grok-2",
+      "object": "model",
+      "created": null,
+      "owned_by": "x-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "grok-2-vision",
+      "object": "model",
+      "created": null,
+      "owned_by": "x-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "grok-3-mini-fast",
+      "object": "model",
+      "created": null,
+      "owned_by": "x-ai",
+      "unavailable": true,
+      "type": "chat.completions"
+    },
+    {
+      "id": "grok-3-mini",
+      "object": "model",
+      "created": null,
+      "owned_by": "x-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "grok-3-fast",
+      "object": "model",
+      "created": null,
+      "owned_by": "x-ai",
+      "unavailable": true,
+      "type": "chat.completions"
+    },
+    {
+      "id": "grok-3",
+      "object": "model",
+      "created": null,
+      "owned_by": "x-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-exp-1206",
+      "object": "model",
+      "created": 1707116800,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "learnlm-1.5-pro-experimental",
+      "object": "model",
+      "created": 1707116800,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-1.5-pro",
+      "object": "model",
+      "created": 1707116800,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-1.5-pro-latest",
+      "object": "model",
+      "created": 1707116800,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-1.5-flash",
+      "object": "model",
+      "created": 1707116800,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-1.5-flash-latest",
+      "object": "model",
+      "created": 1707116800,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-1.5-flash-8b",
+      "object": "model",
+      "created": 1707116800,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-1.5-flash-8b-latest",
+      "object": "model",
+      "created": 1707116800,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-2.0-flash",
+      "object": "model",
+      "created": null,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-2.0-flash-thinking-exp",
+      "object": "model",
+      "created": null,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-2.0-flash-lite",
+      "object": "model",
+      "created": null,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-2.0-flash-lite-preview-02-05",
+      "object": "model",
+      "created": null,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-2.0-pro-exp",
+      "object": "model",
+      "created": null,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-2.0-flash-exp-image-generation",
+      "object": "model",
+      "created": null,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-2.5-pro-exp-03-25",
+      "object": "model",
+      "created": null,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemini-2.5-flash-preview-04-17",
+      "object": "model",
+      "created": null,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemma-3-27b",
+      "object": "model",
+      "created": null,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemma-3-1b",
+      "object": "model",
+      "created": null,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemma-3-4b",
+      "object": "model",
+      "created": null,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "gemma-3-12b",
+      "object": "model",
+      "created": null,
+      "owned_by": "google",
+      "type": "chat.completions"
+    },
+    {
+      "id": "qwen-2.5-plus",
+      "object": "model",
+      "created": 1681190400,
+      "owned_by": "qwen",
+      "type": "chat.completions"
+    },
+    {
+      "id": "qwen-2.5-max",
+      "object": "model",
+      "created": 1681190400,
+      "owned_by": "qwen",
+      "type": "chat.completions"
+    },
+    {
+      "id": "qwen-2.5-turbo",
+      "object": "model",
+      "created": 1681190400,
+      "owned_by": "qwen",
+      "type": "chat.completions"
+    },
+    {
+      "id": "qwen-2.5-72b",
+      "object": "model",
+      "created": 1681190400,
+      "owned_by": "qwen",
+      "type": "chat.completions"
+    },
+    {
+      "id": "qwen-2.5-14b",
+      "object": "model",
+      "created": 1681190400,
+      "owned_by": "qwen",
+      "type": "chat.completions"
+    },
+    {
+      "id": "qvq-72b",
+      "object": "model",
+      "created": 1681190400,
+      "owned_by": "qwen",
+      "type": "chat.completions"
+    },
+    {
+      "id": "qwen-2.5-coder-32b",
+      "object": "model",
+      "created": 1681190400,
+      "owned_by": "qwen",
+      "type": "chat.completions"
+    },
+    {
+      "id": "qwq-32b",
+      "object": "model",
+      "created": 1681190400,
+      "owned_by": "qwen",
+      "type": "chat.completions"
+    },
+    {
+      "id": "qwen-2-vl-7b",
+      "object": "model",
+      "created": 1681190400,
+      "owned_by": "qwen",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mistral-nemo",
+      "object": "model",
+      "created": 1681190400,
+      "owned_by": "mistral-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mistral-small-3.1-24b",
+      "object": "model",
+      "created": null,
+      "owned_by": "mistral-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mistral-small-24b",
+      "object": "model",
+      "created": null,
+      "owned_by": "mistral-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mistral-7b",
+      "object": "model",
+      "created": null,
+      "owned_by": "mistral-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mistral-large",
+      "object": "model",
+      "created": null,
+      "owned_by": "mistral-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mistral-large-2407",
+      "object": "model",
+      "created": null,
+      "owned_by": "mistral-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mistral-7b-openorca",
+      "object": "model",
+      "created": null,
+      "owned_by": "mistral-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mistral-lite",
+      "object": "model",
+      "created": null,
+      "owned_by": "mistral-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mistral-saba-24b",
+      "object": "model",
+      "created": null,
+      "owned_by": "mistral-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mistral-nemo-12b",
+      "object": "model",
+      "created": null,
+      "owned_by": "mistral-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mixtral-8x22b",
+      "object": "model",
+      "created": null,
+      "owned_by": "mistral-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "yi-large",
+      "object": "model",
+      "created": null,
+      "owned_by": "01.ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-4-scout",
+      "object": "model",
+      "created": null,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-4-maverick",
+      "object": "model",
+      "created": null,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3-70b",
+      "object": "model",
+      "created": null,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3-8b",
+      "object": "model",
+      "created": null,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-guard-3",
+      "object": "model",
+      "created": null,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3.1-8b",
+      "object": "model",
+      "created": 1712649600,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3.1-70b",
+      "object": "model",
+      "created": 1712649600,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3.1-405b",
+      "object": "model",
+      "created": 1712649600,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3.2-1b",
+      "object": "model",
+      "created": 1712649600,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3.2-3b",
+      "object": "model",
+      "created": 1712649600,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3.2-11b",
+      "object": "model",
+      "created": 1712649600,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3.3-70b",
+      "object": "model",
+      "created": 1712649600,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3.2-90b",
+      "object": "model",
+      "created": 1712649600,
+      "owned_by": "meta-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3-uncensored",
+      "object": "model",
+      "created": null,
+      "owned_by": "system",
+      "type": "chat.completions"
+    },
+    {
+      "id": "hermes-3-llama-3.1-8b",
+      "object": "model",
+      "created": 1712649600,
+      "owned_by": "nousresearch",
+      "type": "chat.completions"
+    },
+    {
+      "id": "reka-flash-3",
+      "object": "model",
+      "created": 1712649600,
+      "owned_by": "reka-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "zephyr-7b-beta",
+      "object": "model",
+      "created": null,
+      "owned_by": "system",
+      "type": "chat.completions"
+    },
+    {
+      "id": "zephyr-7b-alpha",
+      "object": "model",
+      "created": null,
+      "owned_by": "system",
+      "type": "chat.completions"
+    },
+    {
+      "id": "opt-6.7b",
+      "object": "model",
+      "created": null,
+      "owned_by": "system",
+      "type": "chat.completions"
+    },
+    {
+      "id": "pygmalion-1.3b",
+      "object": "model",
+      "created": null,
+      "owned_by": "system",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mythomax-13b",
+      "object": "model",
+      "created": null,
+      "owned_by": "gryphe",
+      "type": "chat.completions"
+    },
+    {
+      "id": "l3.1-70b-euryale-v2.2",
+      "object": "model",
+      "created": null,
+      "owned_by": "sao10k",
+      "type": "chat.completions"
+    },
+    {
+      "id": "toppy-7b",
+      "object": "model",
+      "created": null,
+      "owned_by": "undi95",
+      "type": "chat.completions"
+    },
+    {
+      "id": "lfm-3b",
+      "object": "model",
+      "created": null,
+      "owned_by": "liquid-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "lfm-40b",
+      "object": "model",
+      "created": null,
+      "owned_by": "liquid-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "lfm-7b",
+      "object": "model",
+      "created": null,
+      "owned_by": "liquid-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "olympiccoder-7b",
+      "object": "model",
+      "created": null,
+      "owned_by": "open-r1",
+      "type": "chat.completions"
+    },
+    {
+      "id": "olympiccoder-32b",
+      "object": "model",
+      "created": null,
+      "owned_by": "open-r1",
+      "type": "chat.completions"
+    },
+    {
+      "id": "moonlight-16b-a3b",
+      "object": "model",
+      "created": null,
+      "owned_by": "moonshotai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "kimi-vl-a3b-thinking",
+      "object": "model",
+      "created": null,
+      "owned_by": "moonshotai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "dolphin3.0-r1-mistral-24b",
+      "object": "model",
+      "created": null,
+      "owned_by": "cognitivecomputations",
+      "type": "chat.completions"
+    },
+    {
+      "id": "dolphin3.0-mistral-24b",
+      "object": "model",
+      "created": null,
+      "owned_by": "cognitivecomputations",
+      "type": "chat.completions"
+    },
+    {
+      "id": "phi-1.5",
+      "object": "model",
+      "created": null,
+      "owned_by": "microsoft",
+      "type": "chat.completions"
+    },
+    {
+      "id": "phi-3-mini-128k",
+      "object": "model",
+      "created": null,
+      "owned_by": "microsoft",
+      "type": "chat.completions"
+    },
+    {
+      "id": "phi-3-medium-128k",
+      "object": "model",
+      "created": null,
+      "owned_by": "microsoft",
+      "type": "chat.completions"
+    },
+    {
+      "id": "phi-4",
+      "object": "model",
+      "created": null,
+      "owned_by": "microsoft",
+      "type": "chat.completions"
+    },
+    {
+      "id": "mai-ds-r1",
+      "object": "model",
+      "created": null,
+      "owned_by": "microsoft",
+      "type": "chat.completions"
+    },
+    {
+      "id": "nemotron-4-340b",
+      "object": "model",
+      "created": null,
+      "owned_by": "nvidia",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3.1-nemotron-nano-8b-v1",
+      "object": "model",
+      "created": null,
+      "owned_by": "nvidia",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3.3-nemotron-super-49b-v1",
+      "object": "model",
+      "created": null,
+      "owned_by": "nvidia",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3.1-nemotron-ultra-253b-v1",
+      "object": "model",
+      "created": null,
+      "owned_by": "nvidia",
+      "type": "chat.completions"
+    },
+    {
+      "id": "midnight-rose-70b",
+      "object": "model",
+      "created": null,
+      "owned_by": "sophosympatheia",
+      "type": "chat.completions"
+    },
+    {
+      "id": "llama-3-lumimaid-8b",
+      "object": "model",
+      "created": null,
+      "owned_by": "neversleep",
+      "type": "chat.completions"
+    },
+    {
+      "id": "glm-z1-32b",
+      "object": "model",
+      "created": null,
+      "owned_by": "thudm",
+      "type": "chat.completions"
+    },
+    {
+      "id": "glm-4-32b",
+      "object": "model",
+      "created": null,
+      "owned_by": "thudm",
+      "type": "chat.completions"
+    },
+    {
+      "id": "shisa-v2-llama-3.3-70b",
+      "object": "model",
+      "created": null,
+      "owned_by": "shisa-ai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "qwq-32b-arliai-rpr-v1",
+      "object": "model",
+      "created": null,
+      "owned_by": "arliai",
+      "type": "chat.completions"
+    },
+    {
+      "id": "deepcoder-14b-preview",
+      "object": "model",
+      "created": null,
+      "owned_by": "agentica-org",
+      "type": "chat.completions"
+    },
+    {
+      "id": "qwerky-72b",
+      "object": "model",
+      "created": null,
+      "owned_by": "featherless",
+      "type": "chat.completions"
+    }
+  ]
+}

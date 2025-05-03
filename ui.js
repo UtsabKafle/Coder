@@ -402,23 +402,25 @@ export function updateLintStatus(problems) {
 // --- Initial UI Setup ---
 
 export function initializeUI() {
-    const files = fileStorage.getFiles();
-    fileListContainer.innerHTML = ''; // Clear existing list
-    const tree = buildFileTree(files);
-    renderFileTree(tree, fileListContainer, 0);
+    const files = initializeFiles(); // Load/Initialize files first
+    fileListContainer.innerHTML = '';
+    const fileTree = buildFileTree(files);
+    renderFileTree(fileTree, fileListContainer, 0);
 
-    // Determine the file to potentially activate (first existing or null if none)
-    const fileKeys = Object.keys(files);
-    const firstFile = fileKeys.length > 0 ? fileKeys[0] : null;
+    // Populate AI model selector
+    populateModelSelector(); // Call the new function here
+
+    // Determine which file to show initially
+    let initialFile = null;
 
     // Check if any tabs exist, if not add the first file (if one exists)
-    if (!tabsContainer.querySelector('.tab') && firstFile) {
-        addOrActivateTab(firstFile);
+    if (!tabsContainer.querySelector('.tab') && fileTree[Object.keys(fileTree)[0]]) {
+        addOrActivateTab(Object.keys(fileTree)[0]);
     }
 
     // Ensure the active tab corresponds to the file tree
     const activeTab = tabsContainer.querySelector('.tab.active');
-    const activeFilePath = activeTab ? activeTab.getAttribute('data-path') : firstFile;
+    const activeFilePath = activeTab ? activeTab.getAttribute('data-path') : Object.keys(fileTree)[0];
     
     // Only activate UI elements if there is an active file path
     if (activeFilePath) {
@@ -652,4 +654,56 @@ if (lintStatusEl) {
             linterPanel.style.display = 'block';
         }
     };
+}
+
+// Function to populate the AI model selector dropdown
+async function populateModelSelector() {
+    const modelSelector = document.getElementById('ai-model-select');
+    if (!modelSelector) {
+        console.error("AI model selector dropdown not found.");
+        return;
+    }
+
+    try {
+        const response = await fetch('./models.txt');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const modelData = await response.json();
+
+        if (!modelData || !Array.isArray(modelData.data)) {
+            throw new Error("Invalid format in models.txt");
+        }
+
+        // Clear existing options (except the placeholder)
+        // modelSelector.innerHTML = '<option value="" disabled selected>Select a model...</option>'; 
+        modelSelector.innerHTML = ''; // Clear all, including placeholder
+
+        // Filter for chat completion models and populate dropdown
+        const chatModels = modelData.data.filter(model => model.type === 'chat.completions' && !model.unavailable);
+        
+        if (chatModels.length === 0) {
+             modelSelector.innerHTML = '<option value="" disabled>No models available</option>';
+             return;
+        }
+
+        chatModels.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model.id;
+            option.textContent = model.id; // Display model ID
+            modelSelector.appendChild(option);
+        });
+        
+        // Try to select the previously used model or a default one
+        const lastModel = localStorage.getItem('coder_last_ai_model') || 'gemini-2.5-pro-exp-03-25'; // Default if none saved
+        if (modelSelector.querySelector(`option[value="${lastModel}"]`)) {
+             modelSelector.value = lastModel;
+        } else if (chatModels.length > 0) {
+             modelSelector.value = chatModels[0].id; // Fallback to the first available model
+        }
+
+    } catch (error) {
+        console.error("Error fetching or parsing models.txt:", error);
+        modelSelector.innerHTML = '<option value="" disabled>Error loading models</option>';
+    }
 } 

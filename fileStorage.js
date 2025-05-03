@@ -51,15 +51,63 @@ export const fileStorage = {
     }
 };
 
+// Default file content
+const defaultIndexHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coder</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="main.js" defer></script>
+</head>
+<body>
+    <h1>Welcome to Coder!</h1>
+</body>
+</html>`;
+
+const defaultStylesCSS = `body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    color: #333;
+}`;
+
+const defaultMainJS = `// Coder entry point
+
+console.log("Coder initialized.");
+`;
+
 // Load files from storage or create default files if none exist
 export function initializeFiles() {
-    const files = fileStorage.getFiles();
+    let files = fileStorage.getFiles(); // Use 'let' to allow modification
+    let filesCreated = false;
 
-    // If no files in storage, create default ones
-    if (Object.keys(files).length === 0) {
-        console.log("No files found in localStorage. Starting with an empty workspace.");
-        return {};
+    const defaultFiles = {
+        'index.html': defaultIndexHTML,
+        'styles.css': defaultStylesCSS,
+        'main.js': defaultMainJS
+    };
+
+    // Check and create default files if they don't exist in storage
+    for (const [path, content] of Object.entries(defaultFiles)) {
+        if (files[path] === undefined) {
+             console.log(`Default file '${path}' not found in storage. Creating...`);
+             files[path] = content; // Add to the object first
+             filesCreated = true;
+        }
     }
 
+    // If any default files were added, save the updated collection back to storage
+    if (filesCreated) {
+        console.log("Saving newly created default files to storage.");
+        fileStorage.saveFiles(files);
+    }
+
+    // Return the potentially updated files object
     return files;
 } 

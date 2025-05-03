@@ -21,7 +21,7 @@ export function setAIChatDependencies(dependencies) {
 
 
 // --- AI Chat State ---
-let currentChatId = null;
+// let currentChatId = null;
 let conversationHistory = []; // Stores { role: 'user' | 'assistant', content: '...' }
 let currentAssistantMessageDiv = null; // Reference to the current assistant message UI element
 
@@ -64,7 +64,7 @@ function addMessageToUI(role, content) {
 }
 
 // Update specific parts of an assistant message bubble (Internal)
-function updateAssistantMessageUI(messageDiv, { planning, webResults, finalContent }) {
+function updateAssistantMessageUI(messageDiv, { /* planning, webResults, REMOVED Qwen-specific */ finalContent }) {
      if (!messageDiv || typeof marked === 'undefined') {
          if (!messageDiv) console.error("updateAssistantMessageUI called with null messageDiv");
          if (typeof marked === 'undefined') console.error("marked.js is not available");
@@ -75,49 +75,79 @@ function updateAssistantMessageUI(messageDiv, { planning, webResults, finalConte
     const planningContent = messageDiv.querySelector('.planning-content');
     const toggleButton = messageDiv.querySelector('.toggle-planning');
     const webResultsSection = messageDiv.querySelector('.web-search-results');
-    const webResultsList = webResultsSection?.querySelector('ul'); // Add safe navigation
+    // const webResultsList = webResultsSection?.querySelector('ul'); // REMOVED Qwen-specific
     const mainContent = messageDiv.querySelector('.main-message-content');
 
     // Validate elements before proceeding
-    if (!planningSection || !planningContent || !toggleButton || !webResultsSection || !webResultsList || !mainContent) {
+    // if (!planningSection || !planningContent || !toggleButton || !webResultsSection || !webResultsList || !mainContent) { // REMOVED Qwen-specific webResultsList
+    if (!planningSection || !planningContent || !toggleButton || !webResultsSection || !mainContent) {
         console.error("One or more UI elements missing in assistant message structure.");
         return;
     }
 
-    // Update Planning
-    if (planning) {
-        planningContent.innerHTML = marked.parse(planning);
-        planningSection.style.display = 'block';
-        planningContent.style.display = 'none'; // Always start with planning hidden
-        toggleButton.textContent = 'Show Planning'; // Default to "Show Planning"
-        toggleButton.onclick = () => {
-            const isHidden = planningContent.style.display === 'none';
-            planningContent.style.display = isHidden ? 'block' : 'none';
-            toggleButton.textContent = isHidden ? 'Hide Planning' : 'Show Planning';
-        };
-    } else {
+    // Remove Planning & Web Results logic as it's not clear if the new API supports them
         planningSection.style.display = 'none';
-    }
-
-    // Update Web Results
-    if (webResults && webResults.length > 0) {
-        webResultsList.innerHTML = ''; // Clear previous results
-        webResults.forEach(result => {
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="${result.url}" target="_blank" title="${result.snippet || ''}">${result.title || result.url}</a> ${result.date || ''}`;
-            webResultsList.appendChild(li);
-        });
-        webResultsSection.style.display = 'block';
-    } else {
         webResultsSection.style.display = 'none';
-    }
 
     // Update Main Content
     if (finalContent) {
         try {
+            // Check if content is likely JSON for agentic actions
+            let potentialJson = finalContent.trim();
+            let parsedActions = null;
+            let jsonSource = null; // To store the extracted JSON string
+
+            // 1. Check for JSON within markdown fences ```json ... ```
+            const jsonFenceMatch = potentialJson.match(/^```json\s*([\s\S]*?)\s*```$/);
+            if (jsonFenceMatch && jsonFenceMatch[1]) {
+                 jsonSource = jsonFenceMatch[1].trim();
+                 console.log("Detected JSON within markdown fences.");
+            } else {
+                 // 2. If no fences, check if the whole content looks like JSON
+                 if (potentialJson.startsWith('{') && potentialJson.endsWith('}')) {
+                    jsonSource = potentialJson;
+                    console.log("Detected JSON-like content (no fences).");
+                 }
+            }
+
+            // 3. Try parsing if we found a potential JSON source
+            if (jsonSource) {
+                try {
+                    const parsed = JSON.parse(jsonSource);
+                    // Check if it looks like our expected action format
+                    if (parsed && Array.isArray(parsed.actions) && typeof parsed.explanation === 'string') {
+                        parsedActions = parsed;
+                        console.log("Successfully parsed agentic actions JSON.");
+                        // Display explanation and trigger actions
+                        mainContent.innerHTML = marked.parse(`**Agent Actions:**\n${parsed.explanation}`);
+                        // Use await here as handleAgenticActions might involve async operations (like fileOps needing diff approval)
+                        // Wrap in IIAFE to allow await in non-async function
+                        (async () => {
+                             try {
+                                  await handleAgenticActions(parsed.actions); // Execute the actions
+                             } catch (actionError) {
+                                  console.error("Error executing agentic actions:", actionError);
+                                  // Optionally display an error in the UI
+                                  addMessageToUI('assistant', `⚠️ Error during action execution: ${actionError.message}`);
+                             }
+                        })();
+                    } else {
+                         console.warn("Parsed JSON does not match expected action structure.", parsed);
+                    }
+                } catch (e) {
+                     console.error("Error parsing extracted JSON content:", e, "\nSource:", jsonSource);
+                     // Keep parsedActions = null, will fall through to markdown rendering
+                }
+            }
+
+            // 4. If not parsed as actions, render the original content as Markdown
+            if (!parsedActions) {
+                console.log("Content not parsed as actions, rendering as Markdown.");
             mainContent.innerHTML = marked.parse(finalContent);
+            }
+
         } catch (e) {
-             console.error("Error parsing Markdown:", e);
+             console.error("Error parsing Markdown or handling content:", e);
              mainContent.textContent = finalContent; // Fallback to text content
         }
     } else {
@@ -130,24 +160,32 @@ function updateAssistantMessageUI(messageDiv, { planning, webResults, finalConte
 async function sendChatMessage() {
     const inputElement = document.querySelector('.ai-input');
     const modeSelectElement = document.getElementById('ai-mode-select');
-    const modelSelectElement = document.getElementById('ai-model-select');
+    const modelSelectElement = document.getElementById('ai-model-select'); // Get the new model selector
     // Get active editor pane to fetch current file content
     const activePane = document.querySelector('.editor-pane.active') || document.querySelector('.editor-pane:first-child');
 
-    if (!inputElement || !modeSelectElement || !modelSelectElement) {
+    if (!inputElement || !modeSelectElement || !modelSelectElement) { // Check model selector too
         console.error("AI input, mode selector, or model selector not found.");
         return;
     }
     let message = inputElement.value.trim();
     const selectedMode = modeSelectElement.value;
-    const selectedModelId = modelSelectElement.value;
+    const selectedModelId = modelSelectElement.value; // Get the selected model ID
 
     if (!message) return;
+    if (!selectedModelId) { // Prevent sending if no model is selected (e.g., during loading error)
+         showAlert('Error', 'Please select an AI model from the dropdown first.');
+         return;
+    }
 
-    const isWebSearchEnabled = message.includes('@web');
-    const isThinkingEnabled = message.includes('@think');
+    // Save the selected model for next session
+    localStorage.setItem('coder_last_ai_model', selectedModelId);
+
+    // Remove Qwen specific tags if they exist
+    // const isWebSearchEnabled = message.includes('@web'); // Removed Qwen feature
+    // const isThinkingEnabled = message.includes('@think'); // Removed Qwen feature
     const displayMessage = message.replace(/@web|@think/g, '').trim();
-    const messageToSend = displayMessage;
+    const messageToSend = displayMessage; // Use the cleaned message
 
     if (!messageToSend) return;
 
@@ -171,33 +209,35 @@ async function sendChatMessage() {
         }
         // Use the new module to gather context
         workspaceContext = gatherContext(activeFilePath, activeFileContent);
+
+        // --- Modify user content for write mode ---
+        // Simpler instructions, less likely to trigger filters.
+        // Embed user request clearly.
+        const writeInstructions = `Task: You are in 'write' mode. Analyze the user request below based on the provided context and respond ONLY with a JSON object containing 'actions' and 'explanation'.
+
+Context:
+---
+${workspaceContext}
+---
+
+User Request: ${messageToSend}`;
+        
+        // Use the new structure for the final content
+        const finalUserContent = writeInstructions;
+        console.log("Prepared request for 'write' mode with SIMPLIFIED instructions and context.");
+        // Update the last message in history to include the full prompt
+        if (conversationHistory.length > 0 && conversationHistory[conversationHistory.length - 1].role === 'user') {
+             conversationHistory[conversationHistory.length - 1].content = finalUserContent;
+        }
+        // --- End Write Mode Preparation ---
     }
     // --- End Context Gathering ---
 
     try {
-        if (!currentChatId) {
-            const response = await fetch('/api/qwen/new-chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: messageToSend,
-                    isWebSearchEnabled: isWebSearchEnabled,
-                    isThinkingEnabled: isThinkingEnabled,
-                    mode: selectedMode,
-                    modelId: selectedModelId,
-                    workspaceContext: workspaceContext // Send context gathered by the module
-                }),
-            });
-            if (!response.ok) throw new Error(`Failed to create new chat: ${await response.text()}`);
-            const chatData = await response.json();
-            currentChatId = chatData.chatId;
-            if (!currentChatId) throw new Error('Backend did not return a chatId.');
-            // Pass workspaceContext and selectedModelId to fetchChatCompletions
-            await fetchChatCompletions(messageToSend, currentChatId, isWebSearchEnabled, isThinkingEnabled, currentAssistantMessageDiv, selectedMode, selectedModelId, workspaceContext);
-        } else {
-             // Pass workspaceContext and selectedModelId to fetchChatCompletions
-            await fetchChatCompletions(messageToSend, currentChatId, isWebSearchEnabled, isThinkingEnabled, currentAssistantMessageDiv, selectedMode, selectedModelId, workspaceContext);
-        }
+        // Pass the full conversation history, including the potentially modified last user message
+        // Pass selectedModelId to the fetch function
+        await fetchChatCompletions(conversationHistory, currentAssistantMessageDiv, selectedMode, selectedModelId);
+
     } catch (error) {
         console.error('Error communicating with AI backend:', error);
         if (currentAssistantMessageDiv) {
@@ -208,225 +248,79 @@ async function sendChatMessage() {
     }
 }
 
-// Function to handle the streaming chat completion (Internal)
-// Add workspaceContext and modelId parameter here
-async function fetchChatCompletions(message, chatId, isWebSearchEnabled, isThinkingEnabled, assistantMessageDiv, mode, modelId, workspaceContext) {
+// Function to handle the chat completion API call (Replaces streaming logic)
+async function fetchChatCompletions(messagesForApi, assistantMessageDiv, mode, selectedModelId) {
     const messagesContainer = document.querySelector('.ai-messages-container');
     if (assistantMessageDiv) {
         const mainContent = assistantMessageDiv.querySelector('.main-message-content');
-        if (mainContent) mainContent.textContent = '';
+        if (mainContent) mainContent.textContent = ''; // Clear thinking message
     }
 
-    const response = await fetch('/api/qwen/chat-completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            message: message,
-            chatId: chatId,
-            previousMessages: conversationHistory.slice(0, -1),
-            isWebSearchEnabled: isWebSearchEnabled,
-            isThinkingEnabled: isThinkingEnabled,
-            mode: mode,
-            modelId: modelId,
-            workspaceContext: workspaceContext // Send context gathered earlier
-        }),
-    });
+    // New API endpoint and details
+    const apiUrl = 'https://api.paxsenix.biz.id/v1/chat/completions';
 
-    if (!response.ok || !response.body) {
-        throw new Error(`Failed to get chat completion: ${response.statusText}`);
-    }
+    // Prepare the request body in the new format
+    const requestBody = {
+        model: selectedModelId, // Use the selected model ID
+        messages: messagesForApi // Send the current conversation history
+        // No streaming options needed for now
+    };
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let fullResponseContent = '';
-    let thinkingContent = '';
-    let webSearchResults = [];
-    let insideThinkTag = false;
-    let jsonBuffer = ''; // Buffer for accumulating JSON data
+    console.log("Sending request to:", apiUrl, "with mode:", mode, "model:", selectedModelId);
+    // console.log("Request Body:", JSON.stringify(requestBody, null, 2)); // Optional: Log request body for debugging
 
     try {
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+                // No authorization or other complex headers needed as per user spec
+            },
+            body: JSON.stringify(requestBody),
+        });
 
-            const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split('\n');
+        if (!response.ok) {
+             let errorBody = 'Could not read error details.';
+             try { errorBody = await response.text(); } catch(e){}
+             throw new Error(`API request failed: ${response.status} ${response.statusText}. Body: ${errorBody}`);
+        }
 
-            for (const line of lines) {
-                if (line.startsWith('data:')) {
-                    const dataStr = line.substring(5).trim();
-                    if (dataStr === '[DONE]') { reader.cancel(); break; }
-                    if (dataStr === '[ERROR]') {
-                        fullResponseContent += '\n\nError from server.';
-                        if (assistantMessageDiv) assistantMessageDiv.classList.add('error-message');
-                        jsonBuffer = ''; // Clear buffer on error
-                        reader.cancel();
-                        break;
-                    }
+        const responseData = await response.json();
+        // console.log("API Response:", JSON.stringify(responseData, null, 2)); // Optional: Log response body
 
-                    // Append the data chunk to the buffer
-                    jsonBuffer += dataStr;
-
-                    try {
-                        // Try parsing the accumulated buffer
-                        const jsonData = JSON.parse(jsonBuffer);
-
-                        // If parse succeeds, clear the buffer and process the data
-                        jsonBuffer = '';
-
-                        const delta = jsonData?.choices?.[0]?.delta || jsonData?.output?.choices?.[0]?.message;
-                        const functionCall = delta?.function_call;
-                        const functionInfo = delta?.extra?.web_search_info;
-
-                        if (functionCall?.name === 'web_search') { /* Ignore */ }
-                        else if (delta?.role === 'function' && delta?.name === 'web_search' && functionInfo) {
-                            webSearchResults = functionInfo;
-                            updateAssistantMessageUI(assistantMessageDiv, { webResults: webSearchResults });
-                        } else if (delta?.role === 'assistant' && delta?.content) {
-                            const content = delta.content;
-
-                            // Improved think tag handling
-                            if (content.includes('<think>')) {
-                                insideThinkTag = true;
-                                const parts = content.split('<think>');
-                                if (parts[0]) fullResponseContent += parts[0];
-                                if (parts[1]) thinkingContent += parts[1];
-                            }
-                            else if (content.includes('</think>')) {
-                                insideThinkTag = false;
-                                const parts = content.split('</think>');
-                                if (parts[0]) thinkingContent += parts[0];
-                                if (parts[1]) fullResponseContent += parts[1];
-                            }
-                            else if (insideThinkTag) {
-                                thinkingContent += content;
-                            }
-                            else {
-                                fullResponseContent += content;
-                            }
-
-                            updateAssistantMessageUI(assistantMessageDiv, {
-                                planning: thinkingContent ? thinkingContent.trim() : null,
-                                webResults: webSearchResults,
-                                finalContent: fullResponseContent // Display accumulated content
-                            });
-                            if (messagesContainer) messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                        }
-                    } catch (e) {
-                        // Check if the error is specifically an incomplete JSON syntax error
-                        if (e instanceof SyntaxError) {
-                            // Incomplete JSON, wait for more data. Log modestly.
-                            // console.log('Incomplete JSON detected, accumulating...');
+        // Extract content from the new response format
+        let assistantContent = '';
+        if (responseData.choices && responseData.choices.length > 0 && responseData.choices[0].message) {
+             assistantContent = responseData.choices[0].message.content;
                         } else {
-                            // A different error occurred during parsing or processing
-                            console.error('[fetchChatCompletions] Error processing JSON data:', e, 'Buffer content:', jsonBuffer);
-                            // Clear the buffer to prevent potential infinite loops with malformed data
-                            jsonBuffer = '';
-                        }
-                    }
-                }
-            }
-            if (reader.reason) break; // Exit outer loop if cancelled
+             console.warn("Unexpected API response structure:", responseData);
+             throw new Error('Received an unexpected response format from the AI API.');
         }
-    } finally {
-        // Ensure stream is properly handled even if errors occur during processing
-         if (!reader.closed) {
-            reader.cancel().catch(e => console.warn("Error cancelling reader:", e));
+
+
+        if (assistantContent && assistantMessageDiv) {
+             // Update the UI with the final content (will handle parsing/agent actions)
+             updateAssistantMessageUI(assistantMessageDiv, { finalContent: assistantContent });
+             // Add the final assistant message to history
+             conversationHistory.push({ role: 'assistant', content: assistantContent });
+             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        } else if (!assistantContent) {
+            // Handle cases where the API might return an empty content
+            updateAssistantMessageUI(assistantMessageDiv, { finalContent: '[AI returned empty content]' });
+            conversationHistory.push({ role: 'assistant', content: '' });
          }
-    }
 
-    const finalTrimmedContent = fullResponseContent.trim();
-    let agenticActions = null;
-    let explanation = finalTrimmedContent;
+        currentAssistantMessageDiv = null; // Reset for the next message
 
-    // --- Debugging Action Execution ---
-    // REMOVED: console.log('[fetchChatCompletions] Mode:', mode);
-    // REMOVED: console.log('[fetchChatCompletions] Final content received:', finalTrimmedContent);
-    // --- End Debugging ---
-
-    const jsonFenceStart = '```json\n';
-    const jsonFenceEnd = '\n```';
-    let potentialJson = null;
-
-    if (mode === 'write' && finalTrimmedContent.startsWith(jsonFenceStart) && finalTrimmedContent.endsWith(jsonFenceEnd)) {
-        // REMOVED: console.log('[fetchChatCompletions] Detected JSON fence wrapper.');
-        potentialJson = finalTrimmedContent.substring(jsonFenceStart.length, finalTrimmedContent.length - jsonFenceEnd.length);
-        // REMOVED: console.log('[fetchChatCompletions] Extracted potential JSON:', potentialJson);
-
-        // REMOVED: console.log('[fetchChatCompletions] Attempting to parse extracted JSON...');
-        try {
-            const parsedResponse = JSON.parse(potentialJson);
-            // REMOVED: console.log('[fetchChatCompletions] JSON parsed successfully.');
-
-            // Show the raw JSON block to the user for transparency
-            const debugContent = "```json\n" + JSON.stringify(parsedResponse, null, 2) + "\n```\n\n";
-
-            if (parsedResponse && Array.isArray(parsedResponse.actions) && typeof parsedResponse.explanation === 'string') {
-                agenticActions = parsedResponse.actions;
-                explanation = parsedResponse.explanation;
-                // REMOVED: console.log('[fetchChatCompletions] Successfully parsed actions. agenticActions set.');
-            } else {
-                explanation = debugContent + "⚠️ Error: The response format does not match expected structure. Please try again.";
-                console.warn('[fetchChatCompletions] Parsed JSON structure mismatch.');
-            }
-        } catch (e) {
-            // Keep the raw content display in case of parsing errors
-            explanation = "⚠️ Error: Could not parse the AI response as valid JSON. Please try again.\nRaw content was:\n" + finalTrimmedContent;
-            console.error('[fetchChatCompletions] JSON parsing error:', e);
-            potentialJson = null; // Ensure parsing failure doesn't proceed
-        }
-    } else {
-        // REMOVED: console.log('[fetchChatCompletions] Did not detect JSON fence wrapper or not in write mode.');
-        // If not wrapped, but still might be JSON (though less likely now)
-        if (mode === 'write' && finalTrimmedContent.startsWith('{') && finalTrimmedContent.endsWith('}')) {
-            console.warn('[fetchChatCompletions] Content looked like JSON but was not wrapped in fences. Attempting parse anyway.')
-            potentialJson = finalTrimmedContent;
-            try {
-                 const parsedResponse = JSON.parse(potentialJson);
-                 // Simplified handling if direct JSON is ever sent
-                 if (parsedResponse && Array.isArray(parsedResponse.actions) && typeof parsedResponse.explanation === 'string') {
-                     agenticActions = parsedResponse.actions;
-                     // Use only the explanation, hide the raw JSON
-                     explanation = parsedResponse.explanation;
-                     // REMOVED: console.log('[fetchChatCompletions] Successfully parsed UNWRAPPED actions.');
-                 } else {
-                      explanation = "⚠️ Warning: Received unwrapped JSON with unexpected structure.";
-                 }
-            } catch (e) {
-                 explanation = "⚠️ Error: Failed to parse unwrapped JSON-like content.";
-                 console.error('[fetchChatCompletions] Error parsing unwrapped JSON:', e);
-            }
-        }
-    }
-
-    updateAssistantMessageUI(assistantMessageDiv, {
-        planning: thinkingContent ? thinkingContent.trim() : null,
-        webResults: webSearchResults,
-        finalContent: explanation
-    });
-
-    // --- Debugging Action Execution ---
-    // REMOVED: console.log('[fetchChatCompletions] Value of agenticActions before final check:', agenticActions);
-    // --- End Debugging ---
-
-    if (agenticActions) {
-        // REMOVED: console.log('[fetchChatCompletions] agenticActions is valid. Calling handleAgenticActions...');
-        try {
-            // Call the imported handler
-            await handleAgenticActions(agenticActions);
         } catch (error) {
-            console.error("Error executing agentic actions:", error);
-            // Use the internal addMessageToUI for errors originating here
-            addMessageToUI('assistant', `Error executing actions: ${error.message}`);
-        }
-    } else {
-         // REMOVED: console.log('[fetchChatCompletions] agenticActions is null or invalid. Skipping handleAgenticActions call.');
-    }
-
-    if (explanation) {
-        conversationHistory.push({ role: 'assistant', content: explanation });
+         console.error("Error fetching or processing chat completion:", error);
+         if (assistantMessageDiv) {
+             updateAssistantMessageUI(assistantMessageDiv, { finalContent: `Error: ${error.message}` });
+             assistantMessageDiv.classList.add('error-message');
     }
     currentAssistantMessageDiv = null;
+         // Do not add error messages to history? Or maybe add a specific type? For now, don't.
+    }
 }
 
 // Add this helper function to add basic styles to your AI chat
